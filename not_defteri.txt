@@ -1,0 +1,80 @@
+================================================================================
+       AURA SMART HOME OS - DETAYLI YOL HARİTASI (FAZLAR) VE NOT DEFTERİ
+================================================================================
+
+Proje Adı: AURA Modular Smart Home OS
+Güncel Tamamlanma Oranı: %75
+Dosya Adı: not_defteri.txt
+Konum: c:\Users\LENOVO\Documents\smart house\not_defteri.txt
+
+
+--------------------------------------------------------------------------------
+1. MERAK ETTİĞİNİZ KISIMLARIN CEVAPLARI (GERÇEKÇİ & KOLAY ANLATIM)
+--------------------------------------------------------------------------------
+
+A. SUNUCU KONUSU: Devasa Oracle Sunucu Kabini mi Alacağız? Yüzlerce Kod mu Yazacağız?
+   - GERÇEK: Kesinlikle HAYIR! Sunucu kabinleri devasa şirketler içindir. Bizim "Ev Sunucusu" dediğimiz şey:
+     * Elinizdeki eski bir laptop,
+     * Veya fındık büyüklüğündeki 80$'lık bir Raspberry Pi 5,
+     * Veya ikinci el 100$'lık bir Mini PC (Intel NUC)'dir.
+   - KOD YAZMA: Yüzlerce satır kod yazmanıza hiç gerek yok! Tüm Python sunucu kodlarını ve MQTT arka plan sistemini sizin için hazırlıyoruz. Siz sadece "python server.py" yazıp çalıştıracaksınız.
+
+B. DONANIM VE SENSÖRLER: Çok mu Pahalı? Maket Ev Yapabilir miyiz?
+   - GERÇEK: Pahalı değil! MIT ve TÜBİTAK yarışmalarında jürinin en çok sevdiği şey "Akıllı Maket Ev Prototipi"dir.
+   - Bütçe Listesi:
+     * Karton / Akrilik Maket Ev: 50-100 TL
+     * ESP32 Beyin Kartı (Mikrodenetleyici): Tanesi 150-200 TL ($4-5)
+     * Sıcaklık Sensörü (DHT11): 50 TL ($1.5)
+     * Küçük Servo Motor (Kapılar İçin): 40 TL ($1)
+     * Mini Su Pompası (Maket Su Arıtımı İçin): 60 TL ($2)
+   - Toplam Bütçe: Yaklaşık 500 - 1000 TL ($20 - $35) ile masaüstünüzde mükemmel çalışan bir maket ev yapabilirsiniz!
+
+
+--------------------------------------------------------------------------------
+2. ÜNİVERSİTE KONULARININ EN BASİT VE ANLAŞILIR ANLATIMI
+--------------------------------------------------------------------------------
+
+1. Termal Model ve Isı Transfer Denklemi Nedir?
+   - Mantık: Odayı 25°C yapmak için klimayı köklemek elektrik faturasını tavan yaptırır. Isı transfer denklemi, odanın ne kadar hızlı soğuduğunu hesaplayan "akıllı hava durumu formülüdür".
+   - Formül: Gerekli Isı Gücü = Oda Hacmi x (Hedef 25°C - Dış Sıcaklık) x Yalıtım Katsayısı.
+   - Sistem bu hesabı yapar; klimayı %30, alttan ısıtmayı %50 çalıştırarak tam 25°C'yi en düşük elektrik faturasıyla yakalar.
+
+2. Oyun Teorisi (Game Theory - Odalar Arası Pazarlık) Nedir?
+   - Mantık: Aynı anda Fırın, Klima ve Banyo Isıtıcısı çalışırsa sigorta atar! Oyun teorisi odaların birbiriyle elektrik pazarlığı yapmasıdır.
+   - Örnek: Mutfak "Fırında yemeğim var, 2000W lazım" der. Yatak Odası "Benim sıcaklığım 23°C, acil değil ben 500W'a düşüyorum" der. Sigorta atmadan güç paylaşılır.
+
+3. Su Arıtma Kütle Dengesi ve Kimyasal Hesaplama Nedir?
+   - Formül: Toplam Arıtılan Su = Gri Su (Duş/Lavabo) + Yarı-Gri Su (Makine) - Tortu Kaybı.
+   - Temiz Su Saflığı (TDS) = Giriş Kirliliği x (1 - Filtre Verimi %80.2).
+   - Banyodan çıkan 100L suyun 80.2 Litresi klozet rezervuarında ve bahçede sıfır maliyetle tekrar kullanılır.
+
+
+--------------------------------------------------------------------------------
+3. PROJE FAZLARI VE GÜNCEL DURUM (%75)
+--------------------------------------------------------------------------------
+
+[FAZ 1 - TAMAMLANDI %100]: Konsept, Arayüz ve Canlı Dijital İkiz
+- Oda bazlı otonom sistem mimarisi.
+- Ev içi yerel sunucu (Zero-Cloud) konsepti.
+- İnteraktif Web Dijital İkiz arayüzü (index.html, styles.css, app.js).
+- Kuşbakışı mimari kat planı (smart_home_floorplan.jpg).
+- Motorlu kapı anahtarları ve 25°C 3'lü iklimlendirme preset butonu.
+- Sürdürülebilir gri su arıtma ve geri dönüşüm gösterge paneli.
+
+[FAZ 2 - TAMAMLANDI %100]: Matematiksel Formüller, Basit Fizik & Sunum Belgeleri
+- Termal model ısı transfer denklemlerinin basitleştirilmiş mantığı.
+- Odalar arası Oyun Teorisi pazarlık açıklaması.
+- Gri Su ve Yarı-Gri Su kütle dengesi hesap formülleri.
+- Jüri / Sunum Soru-Cevap Savunma Rehberi (SUNUM_NOTLARI_VE_KOD_REHBERI.md ve not_defteri.txt).
+
+[FAZ 3 - SIRADAKİ ADIM %40]: Yerel Sunucu Backend Kodu
+- Raspberry Pi / Mini PC için hazır tak-çalıştır Python backend kodu (server_backend.py).
+- Odalar arası yerel MQTT mesajlaşma protokolü kurulumu.
+- Yerel AI (Ollama Local Llama-3) entegrasyon betiği.
+
+[FAZ 4 - GELECEK ADIM %20]: Fiziksel Maket Ev & ESP32 Donanım Rehberi
+- Karton / Akrilik Maket Ev yapım ve donanım yerleşim planı.
+- ESP32 mikrodenetleyici ($4) bağlantı şemaları.
+- Servo motorlu maket kapı ve mini su pompası bağlantı rehberi.
+
+================================================================================

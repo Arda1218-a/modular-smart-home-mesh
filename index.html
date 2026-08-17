@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA Smart Home OS - Modüler Oda Bazlı Akıllı Ev, Su Dönüşümü & AI Sunucu</title>
+    <meta name="description" content="Kuşbakışı Kat Planı, Motorlu Kapılar, 25°C İklimlendirme, Sürdürülebilir Gri Su Dönüşümü ve Yerel Sunucu AI Asistanı ile Geleceğin Akıllı Evi.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons & Chart.js -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>AURA <span>OS v2</span></h2>
+                    <span class="badge-academic">MIT / HARVARD GRADE</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="floorplan">
+                    <i data-lucide="map"></i>
+                    <span>Kuşbakışı Kat Planı & Ev</span>
+                </button>
+                <button class="nav-item" data-tab="water">
+                    <i data-lucide="droplets"></i>
+                    <span>Gri Su & Geri Dönüşüm</span>
+                </button>
+                <button class="nav-item" data-tab="ai-advisor">
+                    <i data-lucide="bot"></i>
+                    <span>Yerel AI Sunucu Asistanı</span>
+                </button>
+                <button class="nav-item" data-tab="energy-security">
+                    <i data-lucide="zap"></i>
+                    <span>Elektrik & Güvenlik</span>
+                </button>
+                <button class="nav-item" data-tab="academic">
+                    <i data-lucide="graduation-cap"></i>
+                    <span>MIT Raporu & Faz Haritası</span>
+                </button>
+            </nav>
+
+            <!-- Quick Ambient Control Widget -->
+            <div class="music-player-widget">
+                <div class="widget-header">
+                    <i data-lucide="music" class="purple"></i>
+                    <span class="widget-title">Akıllı Müzik & Ses</span>
+                </div>
+                <div class="track-info">
+                    <span id="current-track" class="track-name">Lofi Ambient Chill</span>
+                    <span class="track-artist">AURA Audio Edge</span>
+                </div>
+                <div class="player-controls">
+                    <button class="btn-icon" id="btn-prev-track"><i data-lucide="skip-back"></i></button>
+                    <button class="btn-icon primary" id="btn-toggle-music"><i data-lucide="play" id="music-icon"></i></button>
+                    <button class="btn-icon" id="btn-next-track"><i data-lucide="skip-forward"></i></button>
+                </div>
+            </div>
+
+            <!-- Server Telemetry Card -->
+            <div class="server-status-card">
+                <div class="status-header">
+                    <span class="status-dot online"></span>
+                    <span class="status-title">Yerel Ev Sunucusu</span>
+                </div>
+                <div class="status-metrics">
+                    <div class="metric">
+                        <span class="label">Tamamlanma:</span>
+                        <span class="value emerald">%75 Aktif</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Yerel AI:</span>
+                        <span class="value cyan">Llama-3 Micro (Local)</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Gecikme:</span>
+                        <span class="value purple" id="server-latency">0.8 ms</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1 id="page-title">Kuşbakışı Kat Planı & Otonom Ev Yönetimi</h1>
+                    <p class="subtitle">Motorlu Kapılar, 25°C İklimlendirme, Alexa Sesli Karşılama ve Gri Su Entegrasyonu</p>
+                </div>
+
+                <div class="header-actions">
+                    <div class="quick-sim-buttons">
+                        <button class="btn btn-primary" id="btn-welcome-home">
+                            <i data-lucide="home"></i> "Eve Geldim" Karşılama
+                        </button>
+                        <button class="btn btn-emerald" id="btn-target-25">
+                            <i data-lucide="thermometer"></i> Tüm Evi 25°C Yap
+                        </button>
+                        <button class="btn btn-warning" id="btn-sim-motion">
+                            <i data-lucide="footprints"></i> Koridor Hareket Tetikle
+                        </button>
+                    </div>
+                    <div class="clock-display" id="live-clock">17:28:58</div>
+                </div>
+            </header>
+
+            <!-- =================================================================== -->
+            <!-- TAB 1: KUŞBAKIŞI KAT PLANI & OTONOM EV -->
+            <!-- =================================================================== -->
+            <section class="tab-content active" id="tab-floorplan">
+                <!-- Top Key Status Bar -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon purple"><i data-lucide="thermometer-snowflake"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Ortalama Sıcaklık</span>
+                            <span class="stat-value" id="stat-avg-temp">22.4°C</span>
+                            <span class="stat-desc">Hedef: 25.0°C (3'lü HVAC)</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon cyan"><i data-lucide="door-closed"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Motorlu Kapılar</span>
+                            <span class="stat-value" id="stat-doors-status">6 Kapı Kilitli</span>
+                            <span class="stat-desc">Aksiyel Sıkışma Sensörlü</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon emerald"><i data-lucide="droplet"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Geri Dönüştürülen Su</span>
+                            <span class="stat-value" id="stat-recycled-water">195 Litre</span>
+                            <span class="stat-desc">Gri & Yarı-Gri Su Arıtıldı</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon amber"><i data-lucide="zap"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Anlık Elektrik</span>
+                            <span class="stat-value" id="stat-power-draw">1.42 kW</span>
+                            <span class="stat-desc">Güneş + Şebeke Dengeli</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Architectural Floor Plan Display & Interactive Nodes -->
+                <div class="dashboard-split">
+                    <!-- Floorplan Image & Interactive Overlay Pin Container -->
+                    <div class="card floorplan-image-card">
+                        <div class="card-header">
+                            <h3><i data-lucide="compass"></i> Mimari Kuşbakışı Kat Planı</h3>
+                            <span class="card-badge cyan">Canlı Görsel İkiz</span>
+                        </div>
+                        
+                        <div class="floorplan-image-wrapper">
+                            <img src="smart_home_floorplan.jpg" alt="Smart Home Top-Down Architectural Blueprint" class="floorplan-img">
+                            
+                            <!-- Interactive Pins Overlaid on Floorplan Image -->
+                            <div class="map-pin bedroom" style="top: 28%; left: 18%;" data-room="bedroom">
+                                <span class="pin-pulse"></span>
+                                <div class="pin-tooltip">Yatak Odası: 21.5°C | Kapı: Kapalı</div>
+                            </div>
+                            <div class="map-pin kitchen" style="top: 28%; left: 62%;" data-room="kitchen">
+                                <span class="pin-pulse"></span>
+                                <div class="pin-tooltip">Mutfak: AQI 18 | Kapı: Açık</div>
+                            </div>
+                            <div class="map-pin bathroom" style="top: 48%; left: 18%;" data-room="bathroom">
+                                <span class="pin-pulse"></span>
+                                <div class="pin-tooltip">Banyo: Nem 42% | FMCW Radar Aktif</div>
+                            </div>
+                            <div class="map-pin livingroom" style="top: 60%; left: 62%;" data-room="livingroom">
+                                <span class="pin-pulse"></span>
+                                <div class="pin-tooltip">Salon: 23.0°C | TV Standby</div>
+                            </div>
+                            <div class="map-pin hallway" style="top: 45%; left: 35%;" data-room="hallway">
+                                <span class="pin-pulse warning" id="pin-hallway-pulse"></span>
+                                <div class="pin-tooltip">Koridor: Hareket Sensörü Beklemede</div>
+                            </div>
+                            <div class="map-pin server" style="top: 28%; left: 82%;" data-room="server">
+                                <span class="pin-pulse purple"></span>
+                                <div class="pin-tooltip">Sunucu Odası: Local Edge AI Active</div>
+                            </div>
+                            <div class="map-pin water" style="top: 65%; left: 82%;" data-room="water">
+                                <span class="pin-pulse emerald"></span>
+                                <div class="pin-tooltip">Su Arıtma Ünitesi: %80 Dönüşüm</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Motorized Doors & HVAC Quick Control Panel -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i data-lucide="sliders"></i> Motorlu Kapı & 3'lü İklim Kontrolü</h3>
+                            <button class="btn btn-sm btn-outline" id="btn-toggle-all-doors">Tüm Kapıları Aç/Kapa</button>
+                        </div>
+
+                        <!-- Motorized Doors List -->
+                        <div class="doors-control-container">
+                            <h4><i data-lucide="door-closed"></i> Odaların Motorlu Otomatik Kapıları:</h4>
+                            <div class="door-row">
+                                <span><i data-lucide="bed"></i> Yatak Odası Kapısı:</span>
+                                <div class="door-action">
+                                    <span class="badge-door" id="door-status-bedroom">KAPALI</span>
+                                    <button class="btn btn-sm btn-outline door-btn" data-door="bedroom">Tetikle</button>
+                                </div>
+                            </div>
+                            <div class="door-row">
+                                <span><i data-lucide="utensils"></i> Mutfak Sürgülü Kapısı:</span>
+                                <div class="door-action">
+                                    <span class="badge-door open" id="door-status-kitchen">AÇIK</span>
+                                    <button class="btn btn-sm btn-outline door-btn" data-door="kitchen">Tetikle</button>
+                                </div>
+                            </div>
+                            <div class="door-row">
+                                <span><i data-lucide="bath"></i> Banyo Otomatik Kapısı:</span>
+                                <div class="door-action">
+                                    <span class="badge-door" id="door-status-bathroom">KAPALI</span>
+                                    <button class="btn btn-sm btn-outline door-btn" data-door="bathroom">Tetikle</button>
+                                </div>
+                            </div>
+                            <div class="door-row">
+                                <span><i data-lucide="tv"></i> Salon Geniş Sürgülü Kapı:</span>
+                                <div class="door-action">
+                                    <span class="badge-door open" id="door-status-livingroom">AÇIK</span>
+                                    <button class="btn btn-sm btn-outline door-btn" data-door="livingroom">Tetikle</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3-Source Integrated HVAC Panel -->
+                        <div class="hvac-control-container margin-top">
+                            <h4><i data-lucide="flame"></i> 3'lü Entegre Isıtma / Soğutma Sistemi:</h4>
+                            <div class="hvac-sources-grid">
+                                <div class="hvac-box">
+                                    <span class="title"><i data-lucide="layers"></i> Alttan Isıtma</span>
+                                    <span class="status emerald" id="hvac-underfloor">Aktif (%60 Güç)</span>
+                                </div>
+                                <div class="hvac-box">
+                                    <span class="title"><i data-lucide="wind"></i> Inverter Klima</span>
+                                    <span class="status cyan" id="hvac-ac">Eko Mod (25°C Hedef)</span>
+                                </div>
+                                <div class="hvac-box">
+                                    <span class="title"><i data-lucide="radiator"></i> Akıllı Kalorifer</span>
+                                    <span class="status purple" id="hvac-radiator">Dengeli Devrede</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =================================================================== -->
+            <!-- TAB 2: SÜRDÜRÜLEBİLİR EVSEL SU ARITMA & GERİ DÖNÜŞÜM -->
+            <!-- =================================================================== -->
+            <section class="tab-content" id="tab-water">
+                <div class="section-intro">
+                    <h2>Sürdürülebilir Evsel Su Arıtma & Geri Dönüşüm Entegrasyonu</h2>
+                    <p>Önceki projeniz olan evsel gri su ve yarı-gri su arıtma sisteminin akıllı ev otomasyonuna tam entegre olmuş hali.</p>
+                </div>
+
+                <!-- Water Metrics Cards Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon cyan"><i data-lucide="droplet"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Gri Su (Duş/Lavabo)</span>
+                            <span class="stat-value" id="val-greywater">145 Litre</span>
+                            <span class="stat-desc">Hafif kirlilik, direkt filtreleme</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple"><i data-lucide="washing-machine"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Yarı-Gri Su (Makine)</span>
+                            <span class="stat-value" id="val-semigreywater">98 Litre</span>
+                            <span class="stat-desc">Bulaşık + Çamaşır Makinesi</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon emerald"><i data-lucide="recycle"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Geri Dönüştürülen Su</span>
+                            <span class="stat-value" id="val-recycled-total">195 Litre</span>
+                            <span class="stat-desc">Rezervuar & Bahçe sulamada kullanıldı</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon amber"><i data-lucide="gauge"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Şebeke / Musluk Tüketimi</span>
+                            <span class="stat-value" id="val-tap-consumption">243 Litre</span>
+                            <span class="stat-desc">Toplam Şebekeden Çekilen Su</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water Flow Diagram & Filter Status -->
+                <div class="dashboard-split">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i data-lucide="git-commit"></i> 4 Aşamalı Su Geri Dönüşüm Süreci</h3>
+                            <span class="card-badge emerald">%80.2 Verimlilik</span>
+                        </div>
+
+                        <div class="water-flow-steps">
+                            <div class="flow-step">
+                                <div class="step-num">1</div>
+                                <div class="step-details">
+                                    <strong>Toplama & Ayrıştırma Tankı:</strong>
+                                    <p>Musluk, duş (Gri Su) ve Çamaşır/Bulaşık makinesi (Yarı-Gri Su) ayrı kanallardan toplanır.</p>
+                                </div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-num">2</div>
+                                <div class="step-details">
+                                    <strong>Fiziksel Çökeltme & Karbon Filtre:</strong>
+                                    <p>Saç, deterjan tortusu ve büyük partiküller aktif karbon yataktan geçirilir.</p>
+                                </div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-num">3</div>
+                                <div class="step-details">
+                                    <strong>Ters Ozmoz (RO) & UV Sterilizasyon:</strong>
+                                    <p>Bakteri ve kimyasallar %99.4 oranında temizlenir.</p>
+                                </div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-num">4</div>
+                                <div class="step-details">
+                                    <strong>Otonom Dağıtım Tankı:</strong>
+                                    <p>Arıtılan su otomatik olarak klozet rezervuarlarına ve balkon/bahçe sulama tesisatına basılır.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i data-lucide="pie-chart"></i> Su Kullanım Oranları Grafiği</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="waterDoughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =================================================================== -->
+            <!-- TAB 3: YEREL SUNUCU AI ASİSTANI & TAVSİYELER -->
+            <!-- =================================================================== -->
+            <section class="tab-content" id="tab-ai-advisor">
+                <div class="section-intro">
+                    <h2>Evin İçindeki Sunucuda Çalışan Yerel AI Asistanı</h2>
+                    <p>İnternete ihtiyaç duymadan, mahremiyetinizi koruyarak evdeki verileri analiz eden ve tavsiyeler üreten yapay zeka.</p>
+                </div>
+
+                <div class="dashboard-split">
+                    <!-- AI Recommendation Feed -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i data-lucide="sparkles"></i> Akıllı Ev Sunucusu Tavsiye Akışı</h3>
+                            <span class="card-badge purple">Gerçek Zamanlı AI Önerileri</span>
+                        </div>
+
+                        <div class="ai-recommendations-list" id="ai-recommendations">
+                            <div class="ai-recommend-card">
+                                <div class="icon purple"><i data-lucide="droplet"></i></div>
+                                <div class="content">
+                                    <strong>Su Dönüşüm Optimizasyonu:</strong>
+                                    <p>Bugün bulaşık makinesinden 48 Litre yarı-gri su toplandı. Filtreleme sonrası klozet rezervuarına aktarıldı. <strong>%22 tasarruf sağlandı!</strong></p>
+                                </div>
+                            </div>
+                            <div class="ai-recommend-card">
+                                <div class="icon cyan"><i data-lucide="thermometer"></i></div>
+                                <div class="content">
+                                    <strong>3'lü İklimlendirme Dengesi:</strong>
+                                    <p>Yatak odası 19.5°C'den 25°C'ye çıkarılırken önce Alttan Isıtma, ardından Inverter Klima eko-modda çalıştırıldı. Elektrik tüketimi <strong>%18 düşürüldü.</strong></p>
+                                </div>
+                            </div>
+                            <div class="ai-recommend-card">
+                                <div class="icon emerald"><i data-lucide="footprints"></i></div>
+                                <div class="content">
+                                    <strong>Koridor Rehber Aydınlatması:</strong>
+                                    <p>Gece koridorda hareket algılandı. Gözü almayan %5 parlaklıkta rehber LED'ler otomatik açıldı.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive AI Chat / Command Console -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i data-lucide="message-square"></i> Yerel AI Asistanı İle Sohbet & Komut</h3>
+                            <span class="card-badge emerald">Local LLM Chat</span>
+                        </div>
+
+                        <div class="chat-container">
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="chat-msg ai">
+                                    <span class="sender">AURA Yerel AI:</span>
+                                    <p>Merhaba! Ben evinizin sunucusunda çalışan yerel yapay zeka asistanıyım. "Sıcaklığı 25 yap", "Eve geldim", "Müzik aç" gibi komutları verebilir veya su/enerji tavsiyesi isteyebilirsiniz.</p>
+                                </div>
+                            </div>
+
+                            <div class="chat-input-row">
+                                <input type="text" id="chat-input" placeholder="Yerel AI'ya bir komut veya soru yazın (ör: Sıcaklığı 25°C yap)...">
+                                <button class="btn btn-primary" id="btn-send-chat"><i data-lucide="send"></i> Gönder</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =================================================================== -->
+            <!-- TAB 4: ELEKTRİK, GÜVENLİK & KORİDOR HAREKET -->
+            <!-- =================================================================== -->
+            <section class="tab-content" id="tab-energy-security">
+                <div class="section-intro">
+                    <h2>Elektrik Tüketim Analizi & Güvenlik Paneli</h2>
+                    <p>Koridor hareket sensörleri, otomatik alarm sistemi ve anlık elektrik güç dağılımı.</p>
+                </div>
+
+                <div class="dashboard-split">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i data-lucide="activity"></i> Anlık Elektrik Güç Dağılımı (kW)</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="energyBarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i data-lucide="shield"></i> Ev Güvenlik & Hareket Tespiti</h3>
+                        </div>
+
+                        <div class="security-controls">
+                            <div class="control-row">
+                                <span>Ev Alarm Sistemi:</span>
+                                <button class="btn btn-sm btn-warning" id="btn-toggle-alarm">Devrede (Devriye)</button>
+                            </div>
+                            <div class="control-row">
+                                <span>Koridor Hareket Sensörü:</span>
+                                <strong class="emerald" id="sensor-hallway-status">BEKLEMEDE (Hareket Yok)</strong>
+                            </div>
+                            <div class="control-row">
+                                <span>Dış Kapı Kilidi:</span>
+                                <strong class="emerald">Motorlu Akıllı Kilit (KİLİTLİ)</strong>
+                            </div>
+                        </div>
+
+                        <div class="alarm-alert-box margin-top" id="alarm-box">
+                            <i data-lucide="shield-check" class="emerald"></i>
+                            <span>Tüm alanlar güvenli. Koridor hareket sensörü aktif.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =================================================================== -->
+            <!-- TAB 5: ACADEMIC REPORT, PHASES & MATH MODELS -->
+            <!-- =================================================================== -->
+            <section class="tab-content" id="tab-academic">
+                <div class="academic-report-container">
+                    <div class="academic-header">
+                        <span class="university-tag">MIT & HARVARD AKADEMİK DEĞERLENDİRME REHBERİ</span>
+                        <h2>Proje İlerleme Durumu: %75 TAMAMLANDI</h2>
+                        <p>Fazlar Halinde Gelişim Haritası, Matematiksel Formüller ve Kolay Fizik Modelleri</p>
+                    </div>
+
+                    <!-- Phase Roadmap Cards -->
+                    <div class="phases-roadmap-grid">
+                        <div class="phase-card completed">
+                            <div class="phase-badge">FAZ 1 - %100</div>
+                            <h3>Konsept, Kat Planı & Arayüz</h3>
+                            <p>Oda bazlı otonomi, kuşbakışı kat planı, motorlu kapılar, 25°C iklim preset ve su dönüşüm paneli.</p>
+                        </div>
+                        <div class="phase-card completed">
+                            <div class="phase-badge">FAZ 2 - %100</div>
+                            <h3>Matematik & Sunum Rehberi</h3>
+                            <p>Isı transfer denklemi (MPC), Oyun Teorisi (CNP pazarlık), Su kütle dengesi ve jüri Soru-Cevap notları.</p>
+                        </div>
+                        <div class="phase-card in-progress">
+                            <div class="phase-badge">FAZ 3 - %40</div>
+                            <h3>Yerel Sunucu Backend Kodu</h3>
+                            <p>Raspberry Pi / Mini PC için hazır Python MQTT mesajlaşma ve Yerel AI (Ollama Llama-3) sunucu kütüphanesi.</p>
+                        </div>
+                        <div class="phase-card planned">
+                            <div class="phase-badge">FAZ 4 - %20</div>
+                            <h3>Maket Ev & ESP32 Donanım</h3>
+                            <p>500-1000 TL bütçeli Karton/Akrilik maket ev planı, ucuz ESP32 ($4) mikrodenetleyici ve sensör devre şemaları.</p>
+                        </div>
+                    </div>
+
+                    <!-- Intuitive Math Models Breakdown -->
+                    <div class="academic-grid margin-top">
+                        <div class="card academic-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="flame"></i> 1. Termal Model & Isı Transfer Denklemi</h3>
+                            </div>
+                            <p><strong>Neden Gerekli?</strong> Odayı 25°C yapmak için klimayı sonuna kadar açmak elektriği israf eder. Isı transfer denklemi odanın soğuma hızını hesaplayan <i>"akıllı hava durumu formülüdür"</i>.</p>
+                            <div class="verdict-box">
+                                <code>Gerekli Güç = Oda Hacmi × (25°C - Dış Sıcaklık) × Yalıtım Katsayısı</code><br>
+                                <span class="subtext">Klima %30, alttan ısıtma %50 çalışarak 25°C'ye en düşük elektrik faturasıyla ulaşılır.</span>
+                            </div>
+                        </div>
+
+                        <div class="card academic-card">
+                            <div class="card-header">
+                                <h3><i data-lucide="git-pull-request"></i> 2. Oyun Teorisi (Odalar Arası Pazarlık)</h3>
+                            </div>
+                            <p><strong>Neden Gerekli?</strong> Mutfak fırını, yatak odası kliması ve banyo ısıtıcısı aynı anda çalışırsa sigorta atar! Oyun teorisi odaların birbiriyle elektrik pazarlığı yapmasını sağlar.</p>
+                            <div class="verdict-box">
+                                <strong>Pazarlık:</strong> Mutfak 2000W ister, Yatak Odası "Sıcaklığım 23°C, 500W'a düşüyorum" der. Sigorta atmadan elektrik paylaşılır.
+                            </div>
+                        </div>
+
+                        <div class="card academic-card full-width">
+                            <div class="card-header">
+                                <h3><i data-lucide="droplet"></i> 3. Su Arıtma Kütle Dengesi & Kimyasal Formül</h3>
+                            </div>
+                            <div class="verdict-box">
+                                <code>Toplam Arıtılan Su = Gri Su (Duş/Lavabo) + Yarı-Gri Su (Makine) - Tortu Kaybı</code><br>
+                                <code>Temiz Su Saflığı (TDS) = Giriş Kirliliği × (1 - Filtre Verimi %80.2)</code><br>
+                                <span class="subtext">Banyodan çıkan 100L suyun 80.2 Litresi klozet rezervuarında ve bahçede sıfır maliyetle tekrar kullanılır.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
